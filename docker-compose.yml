@@ -249,6 +249,50 @@ services:
       - es-master01
       - es-master02
       - es-master03
+  es-data09: # Data Warm
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: es-data09
+    environment:
+      - node.name=es-data09
+      - node.roles=data_warm
+      - cluster.name=cluster
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=true
+      - xpack.monitoring.collection.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - TAKE_FILE_OWNERSHIP=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data10: # Data Cold
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: es-data10
+    environment:
+      - node.name=es-data10
+      - node.roles=data_cold
+      - cluster.name=cluster
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=true
+      - xpack.monitoring.collection.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - TAKE_FILE_OWNERSHIP=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es-master01
+      - es-master02
+      - es-master03
   es-coo01: # Coordinating Only for Indexer
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-coo01
