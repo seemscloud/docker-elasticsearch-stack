@@ -139,28 +139,28 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data04: # Data Content
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data04
-    environment:
-      - node.name=es-data04
-      - node.roles=data_content
-      - cluster.name=cluster
-      - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
-      - bootstrap.memory_lock=true
-      - xpack.ml.enabled=true
-      - xpack.monitoring.collection.enabled=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - TAKE_FILE_OWNERSHIP=true
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    depends_on:
-      - es-master01
-      - es-master02
-      - es-master03
+#  es-data04: # Data Content
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+#    container_name: es-data04
+#    environment:
+#      - node.name=es-data04
+#      - node.roles=data_content
+#      - cluster.name=cluster
+#      - discovery.seed_hosts=es-master01,es-master02,es-master03
+#      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+#      - bootstrap.memory_lock=true
+#      - xpack.ml.enabled=true
+#      - xpack.monitoring.collection.enabled=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#      - TAKE_FILE_OWNERSHIP=true
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    depends_on:
+#      - es-master01
+#      - es-master02
+#      - es-master03
   es-data05: # Data Hot
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-data05
@@ -361,7 +361,7 @@ services:
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
@@ -382,7 +382,7 @@ services:
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
@@ -403,7 +403,7 @@ services:
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
@@ -445,7 +445,7 @@ services:
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
