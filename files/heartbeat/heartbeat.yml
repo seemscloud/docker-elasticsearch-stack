@@ -19,5 +19,5 @@ heartbeat.monitors:
     tags: [ "1002" ]
 
 output.logstash:
-  hosts: ["ls01-shipper:5044"]
+  hosts: ["ls-shipper01:5044"]
   loadbalance: true

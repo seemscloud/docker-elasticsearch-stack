@@ -1,7 +1,7 @@
 #!/bin/bash
 
 while true ; do
-  STATUS=`curl --silent http://es03-coo02:9200/_cluster/health | grep -o green | head -1`
+  STATUS=`curl --silent http://es-coo02:9200/_cluster/health | grep -o green | head -1`
 
   sleep 1
 
@@ -12,7 +12,7 @@ while true ; do
   fi
 done
 
-curl -X PUT --header 'Content-Type: application/json' http://es03-coo02:9200/_ilm/policy/default -d '
+curl -X PUT --header 'Content-Type: application/json' http://es-coo02:9200/_ilm/policy/default -d '
 {
   "policy": {
     "phases": {
@@ -57,7 +57,7 @@ curl -X PUT --header 'Content-Type: application/json' http://es03-coo02:9200/_il
   }
 }'
 
-curl -X PUT --header 'Content-Type: application/json' http://es03-coo02:9200/_cluster/settings -d '
+curl -X PUT --header 'Content-Type: application/json' http://es-coo02:9200/_cluster/settings -d '
 {
     "persistent" : {
         "indices.lifecycle.poll_interval": "5s"

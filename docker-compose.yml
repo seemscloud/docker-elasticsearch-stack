@@ -9,24 +9,25 @@ services:
     ports:
       - "5601:5601"
     depends_on:
-      - es03-coo02
+      - es-coo02
   es-set-defaults:
     image: alpine:3.13.1
     container_name: es-set-defaults
     build:
       context: ./es-set-defaults
     depends_on:
-      - es01-master01
-      - es01-master02
-  es01-master01: # Master
+      - es-master01
+      - es-master02
+      - es-master03
+  es-master01: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es01-master01
+    container_name: es-master01
     environment:
-      - node.name=es01-master01
+      - node.name=es-master01
       - node.roles=master
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -36,15 +37,15 @@ services:
       memlock:
         soft: -1
         hard: -1
-  es01-master02: # Master
+  es-master02: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es01-master02
+    container_name: es-master02
     environment:
-      - node.name=es01-master02
+      - node.name=es-master02
       - node.roles=master
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -54,15 +55,33 @@ services:
       memlock:
         soft: -1
         hard: -1
-  es02-data01: # Data
+  es-master03: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data01
+    container_name: es-master03
     environment:
-      - node.name=es02-data01
+      - node.name=es-master03
+      - node.roles=master
+      - cluster.name=cluster
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=true
+      - xpack.monitoring.collection.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - TAKE_FILE_OWNERSHIP=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  es-data01: # Data
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: es-data01
+    environment:
+      - node.name=es-data01
       - node.roles=data
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -73,17 +92,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es02-data02: # Data
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data02: # Data
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data02
+    container_name: es-data02
     environment:
-      - node.name=es02-data02
+      - node.name=es-data02
       - node.roles=data
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -94,17 +114,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es02-data04: # Data Content
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data04: # Data Content
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data04
+    container_name: es-data04
     environment:
-      - node.name=es02-data04
+      - node.name=es-data04
       - node.roles=data_content
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -115,17 +136,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es02-data05: # Data Hot
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data05: # Data Hot
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data05
+    container_name: es-data05
     environment:
-      - node.name=es02-data05
+      - node.name=es-data05
       - node.roles=data_hot
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -136,17 +158,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es02-data06: # Data Warm
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data06: # Data Warm
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data06
+    container_name: es-data06
     environment:
-      - node.name=es02-data06
+      - node.name=es-data06
       - node.roles=data_warm
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -157,17 +180,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es02-data07: # Data Cold
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data07: # Data Cold
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es02-data07
+    container_name: es-data07
     environment:
-      - node.name=es02-data07
+      - node.name=es-data07
       - node.roles=data_cold
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -178,13 +202,58 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es03-coo01: # Coordinating Only for Indexer
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data08: # Data Hot
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es03-coo01
+    container_name: es-data08
     environment:
-      - node.name=es03-coo01
+      - node.name=es-data08
+      - node.roles=data_hot
+      - cluster.name=cluster
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=true
+      - xpack.monitoring.collection.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - TAKE_FILE_OWNERSHIP=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es-master01
+      - es-master02
+      - es-master03
+  es-data09: # Data
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: es-data09
+    environment:
+      - node.name=es-data09
+      - node.roles=data
+      - cluster.name=cluster
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=true
+      - xpack.monitoring.collection.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - TAKE_FILE_OWNERSHIP=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es-master01
+      - es-master02
+      - es-master03
+  es-coo01: # Coordinating Only for Indexer
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: es-coo01
+    environment:
+      - node.name=es-coo01
       - node.roles=
       - node.master=false
       - node.voting_only=false
@@ -194,8 +263,8 @@ services:
       - node.transform=false
       - node.remote_cluster_client=false
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -205,13 +274,14 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es03-coo02: # Coordinating Only for Kibana
+      - es-master01
+      - es-master02
+      - es-master03
+  es-coo02: # Coordinating Only for Kibana
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es03-coo02
+    container_name: es-coo02
     environment:
-      - node.name=es03-coo02
+      - node.name=es-coo02
       - node.roles=
       - node.master=false
       - node.voting_only=false
@@ -221,8 +291,8 @@ services:
       - node.transform=false
       - node.remote_cluster_client=false
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -232,17 +302,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es04-transform01: # Transform & Remote Cluster Client
+      - es-master01
+      - es-master02
+      - es-master03
+  es-transform01: # Transform & Remote Cluster Client
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es04-transform01
+    container_name: es-transform01
     environment:
-      - node.name=es04-transform01
+      - node.name=es-transform01
       - node.roles=transform,remote_cluster_client
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -252,17 +323,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es05-ml01: # Machine Learning & Remote Cluster Client
+      - es-master01
+      - es-master02
+      - es-master03
+  es-ml01: # Machine Learning & Remote Cluster Client
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es05-ml01
+    container_name: es-ml01
     environment:
-      - node.name=es05-ml01
+      - node.name=es-ml01
       - node.roles=ml,remote_cluster_client
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -272,17 +344,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es06-voting01: # Voting Only
+      - es-master01
+      - es-master02
+      - es-master03
+  es-voting01: # Voting Only
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es06-voting01
+    container_name: es-voting01
     environment:
-      - node.name=es06-voting01
+      - node.name=es-voting01
       - node.roles=master,voting_only
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -292,17 +365,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es07-ingest01: # Ingest
+      - es-master01
+      - es-master02
+      - es-master03
+  es-ingest01: # Ingest
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es07-ingest01
+    container_name: es-ingest01
     environment:
-      - node.name=es07-ingest01
+      - node.name=es-ingest01
       - node.roles=ingest
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -312,17 +386,18 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
-  es08-remote01: # Remote Cluster Client
+      - es-master01
+      - es-master02
+      - es-master03
+  es-remote01: # Remote Cluster Client
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es08-remote01
+    container_name: es-remote01
     environment:
-      - node.name=es08-remote01
+      - node.name=es-remote01
       - node.roles=remote_cluster_client
       - cluster.name=cluster
-      - discovery.seed_hosts=es01-master01,es01-master02
-      - cluster.initial_master_nodes=es01-master01,es01-master02
+      - discovery.seed_hosts=es-master01,es-master02,es-master03
+      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -332,8 +407,9 @@ services:
         soft: -1
         hard: -1
     depends_on:
-      - es01-master01
-      - es01-master02
+      - es-master01
+      - es-master02
+      - es-master03
   httpd01:
     image: httpd:2.4.43
     container_name: httpd01
@@ -347,7 +423,7 @@ services:
       - ./files/auditbeat/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
     command: [ "--strict.perms=false" ]
     depends_on:
-      - ls01-shipper
+      - ls-shipper01
   mb01:
     image: docker.elastic.co/beats/metricbeat:7.11.0
     container_name: mb01
@@ -355,7 +431,7 @@ services:
       - ./files/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
     command: [ "--strict.perms=false" ]
     depends_on:
-      - ls01-shipper
+      - ls-shipper01
   pb01:
     image: docker.elastic.co/beats/packetbeat:7.11.0
     container_name: pb01
@@ -365,7 +441,7 @@ services:
     cap_add:
       - NET_ADMIN
     depends_on:
-      - ls01-shipper
+      - ls-shipper01
   fb01:
     image: docker.elastic.co/beats/filebeat:7.11.0
     container_name: fb01
@@ -375,7 +451,7 @@ services:
     command: [ "--strict.perms=false" ]
     depends_on:
       - httpd01
-      - ls01-shipper
+      - ls-shipper01
   hb01:
     image: docker.elastic.co/beats/heartbeat:7.11.0
     container_name: hb01
@@ -383,7 +459,7 @@ services:
     volumes:
       - ./files/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
     depends_on:
-      - ls01-shipper
+      - ls-shipper01
   apm01:
     image: docker.elastic.co/apm/apm-server:7.11.0
     container_name: apm01
@@ -397,9 +473,9 @@ services:
     container_name: fastapi02
     build:
       context: ./fastapi02
-  ls01-shipper:
+  ls-shipper01:
     image: docker.elastic.co/logstash/logstash:7.11.0
-    container_name: ls01-shipper
+    container_name: ls-shipper01
     volumes:
       - ./files/logstash-shipper/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./files/logstash-shipper/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
@@ -407,9 +483,9 @@ services:
       - kafka1
       - kafka2
       - kafka3
-  ls01-indexer:
+  ls-indexer01:
     image: docker.elastic.co/logstash/logstash:7.11.0
-    container_name: ls01-indexer
+    container_name: ls-indexer01
     volumes:
       - ./files/logstash-indexer/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./files/logstash-indexer/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
@@ -417,7 +493,7 @@ services:
       - kafka1
       - kafka2
       - kafka3
-      - es03-coo01
+      - es-coo01
       - es-set-defaults
   kowl:
     container_name: kowl
