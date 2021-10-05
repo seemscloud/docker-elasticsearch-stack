@@ -38,7 +38,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - es-master01-data:/usr/share/elasticsearch/data
+      - es-master01-data:/usr/share/elasticsearch/data:rw
   es-master02: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-master02
@@ -58,7 +58,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - es-master01-data:/usr/share/elasticsearch/data
+      - es-master02-data:/usr/share/elasticsearch/data:rw
   es-master03: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-master03
@@ -78,7 +78,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - es-master01-data:/usr/share/elasticsearch/data
+      - es-master03-data:/usr/share/elasticsearch/data:rw
   es-data01: # Data
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-data01
@@ -142,11 +142,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-#  es-data04: # Data Content
+#  es-data-content01: # Data Content
 #    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-#    container_name: es-data04
+#    container_name: es-data-content01
 #    environment:
-#      - node.name=es-data04
+#      - node.name=es-data-content01
 #      - node.roles=data_content
 #      - cluster.name=cluster
 #      - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -163,11 +163,11 @@ services:
 #      - es-master01
 #      - es-master02
 #      - es-master03
-  es-data05: # Data Hot
+  es-data-hot01: # Data Hot
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data05
+    container_name: es-data-hot01
     environment:
-      - node.name=es-data05
+      - node.name=es-data-hot01
       - node.roles=data_hot
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -184,11 +184,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data06: # Data Warm
+  es-data-warm01: # Data Warm
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data06
+    container_name: es-data-warm01
     environment:
-      - node.name=es-data06
+      - node.name=es-data-warm01
       - node.roles=data_warm
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -205,11 +205,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data07: # Data Cold
+  es-data-cold01: # Data Cold
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data07
+    container_name: es-data-cold01
     environment:
-      - node.name=es-data07
+      - node.name=es-data-cold01
       - node.roles=data_cold
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -226,11 +226,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data08: # Data Hot
+  es-data-hot02: # Data Hot
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data08
+    container_name: es-data-hot02
     environment:
-      - node.name=es-data08
+      - node.name=es-data-hot02
       - node.roles=data_hot
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -247,11 +247,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data09: # Data Warm
+  es-data-warm02: # Data Warm
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data09
+    container_name: es-data-warm02
     environment:
-      - node.name=es-data09
+      - node.name=es-data-warm02
       - node.roles=data_warm
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
@@ -268,11 +268,11 @@ services:
       - es-master01
       - es-master02
       - es-master03
-  es-data10: # Data Cold
+  es-data-cold02: # Data Cold
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-    container_name: es-data10
+    container_name: es-data-cold02
     environment:
-      - node.name=es-data10
+      - node.name=es-data-cold02
       - node.roles=data_cold
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
