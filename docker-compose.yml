@@ -37,6 +37,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    volumes:
+      - es-master01-data:/usr/share/elasticsearch/data
   es-master02: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-master02
@@ -55,6 +57,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    volumes:
+      - es-master01-data:/usr/share/elasticsearch/data
   es-master03: # Master
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-master03
@@ -73,6 +77,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    volumes:
+      - es-master01-data:/usr/share/elasticsearch/data
   es-data01: # Data
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     container_name: es-data01
@@ -81,7 +87,6 @@ services:
       - node.roles=data
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -103,7 +108,6 @@ services:
       - node.roles=data
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -125,7 +129,6 @@ services:
       - node.roles=data
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -147,7 +150,6 @@ services:
 #      - node.roles=data_content
 #      - cluster.name=cluster
 #      - discovery.seed_hosts=es-master01,es-master02,es-master03
-#      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
 #      - bootstrap.memory_lock=true
 #      - xpack.ml.enabled=true
 #      - xpack.monitoring.collection.enabled=true
@@ -169,7 +171,6 @@ services:
       - node.roles=data_hot
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -191,7 +192,6 @@ services:
       - node.roles=data_warm
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -213,7 +213,6 @@ services:
       - node.roles=data_cold
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -235,7 +234,6 @@ services:
       - node.roles=data_hot
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -257,7 +255,6 @@ services:
       - node.roles=data_warm
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -279,7 +276,6 @@ services:
       - node.roles=data_cold
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -308,7 +304,6 @@ services:
       - node.remote_cluster_client=false
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -336,7 +331,6 @@ services:
       - node.remote_cluster_client=false
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -357,7 +351,6 @@ services:
       - node.roles=transform,remote_cluster_client
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -378,7 +371,6 @@ services:
       - node.roles=ml,remote_cluster_client
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -399,7 +391,6 @@ services:
       - node.roles=master,voting_only
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -420,7 +411,6 @@ services:
       - node.roles=ingest
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -441,7 +431,6 @@ services:
       - node.roles=remote_cluster_client
       - cluster.name=cluster
       - discovery.seed_hosts=es-master01,es-master02,es-master03
-      - cluster.initial_master_nodes=es-master01,es-master02,es-master03
       - bootstrap.memory_lock=true
       - xpack.ml.enabled=true
       - xpack.monitoring.collection.enabled=true
@@ -654,3 +643,6 @@ volumes:
   kafka1-logs:
   kafka2-logs:
   kafka3-logs:
+  es-master01-data:
+  es-master02-data:
+  es-master03-data:
